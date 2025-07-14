@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estoque de Veículos</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <header class="bg-yellow-500 p-6 shadow-md text-white">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Estoque de Veículos</h1>
+      <nav>
+        <ul class="flex gap-4 text-sm">
+          <li><a href="index.html" class="hover:underline">Início</a></li>
+          <li><a href="estoque.html" class="hover:underline">Estoque</a></li>
+          <li><a href="https://wa.me/5511989321702" class="hover:underline">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="estoque"></main>
+
+  <footer class="bg-gray-800 text-white p-6 text-center text-sm">
+    <p>&copy; 2024 | Revenda de Veículos. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    const carros = [
+      { id: "001", ano: "2017", modelo: "MERCEDES-BENZ GLE 63 AMG", versao: "5.5 V8 Turbo Gasolina Coupé 4MATIC 7G-TRONIC", km: "50.000", cor: "Preto", cambio: "Automático", preco: "250000" },
+      { id: "002", ano: "2019", modelo: "MERCEDES-BENZ AMG GT 63", versao: "4.0 V8 TURBO GASOLINA S 4MATIC+ SPEEDSHIFT", km: "37131", cor: "Preto", cambio: "Automático", preco: "405000" },
+      { id: "003", ano: "2021", modelo: "AUDI Q3", versao: "1.4 35 TFSI GASOLINA BLACK S LINE S TRONIC", km: "32.186", cor: "Cinza", cambio: "Automático", preco: "25000" },
+    ];
+
+    const estoque = document.getElementById('estoque');
+
+    carros.forEach(carro => {
+      const card = document.createElement('div');
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition";
+      card.innerHTML = `
+        <div class="p-4">
+          <h2 class="text-lg font-bold">${carro.ano} - ${carro.modelo}</h2>
+          <p class="text-sm">Versão: ${carro.versao}</p>
+          <p class="text-sm">KM: ${parseInt(carro.km).toLocaleString('pt-BR')}</p>
+          <p class="text-sm">Cor: ${carro.cor} | Câmbio: ${carro.cambio}</p>
+          <p class="text-yellow-600 font-bold text-lg">${carro.preco ? 'R$ ' + parseInt(carro.preco).toLocaleString('pt-BR') : 'Consulte'}</p>
+          <a href="index.html?id=${carro.id}" class="inline-block mt-3 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Ver detalhes</a>
+        </div>
+      `;
+      estoque.appendChild(card);
+    });
+  </script>
+</body>
+</html>

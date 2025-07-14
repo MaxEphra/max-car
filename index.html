@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Revenda de Veículos</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .modal, .image-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    .modal-content, .image-modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      max-width: 90%;
+      text-align: center;
+    }
+    .image-modal-content img {
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 0.5rem;
+    }
+    .zoom-image {
+      transition: transform 0.3s ease;
+    }
+    .zoom-image:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900 relative flex flex-col min-h-screen">
+  <!-- HEADER -->
+  <header class="bg-yellow-500 p-6 shadow-md text-white">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Revenda de Veículos</h1>
+      <nav>
+        <ul class="flex gap-4 text-sm">
+          <li><a href="#" class="hover:underline">Início</a></li>
+          <li><a href="estoque.html" class="hover:underline">Estoque</a></li>
+          <li><a href="https://wa.me/5511989321702" class="hover:underline">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 flex-grow" id="car-list"></main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content text-left">
+      <h3 class="text-lg font-bold mb-4 text-center">Informações para aquisição</h3>
+      <p class="text-sm mb-4 text-justify">
+        Para adquirir o veículo nas condições de <strong>futura quitação</strong>, é necessário se tornar <strong>condutor principal</strong> e <strong>comparecer em cartório</strong> para a emissão da <strong>procuração pública de posse do veículo</strong>. A procuração só poderá ser concedida ao <strong>titular da compra</strong> ou ao seu <strong>representante legal (advogado ou advogada)</strong>.
+      </p>
+      <p class="text-sm mb-4 text-justify">
+        O interessado pode solicitar <strong>vídeo detalhado</strong> do veículo pretendido, desde que disponível. Recomendamos a <strong>visita presencial ao nosso estacionamento</strong> para avaliação completa do veículo.
+      </p>
+      <p class="text-sm mb-4 text-justify">
+        A realização de <strong>vistoria presencial ou on-line</strong> será feita apenas mediante <strong>agendamento prévio</strong>.
+      </p>
+      <p class="text-sm text-justify">
+        Todos os veículos disponíveis em estoque contam com <strong>laudo cautelar aprovado</strong>, garantindo segurança e procedência.
+      </p>
+      <div class="text-center mt-4">
+        <button onclick="toggleModal(false)" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div id="imageModal" class="image-modal" onclick="toggleImageModal(false)">
+    <div class="image-modal-content">
+      <img id="modalImage" src="" alt="Imagem do veículo">
+    </div>
+  </div>
+
+  <!-- Botão WhatsApp -->
+  <a href="https://wa.me/5511989321702" target="_blank" class="fixed bottom-4 right-4 z-40 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-full shadow-lg">
+    WhatsApp
+  </a>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-800 text-white p-6 mt-8">
+    <div class="max-w-7xl mx-auto text-center text-sm">
+      <p>&copy; 2024 | Revenda de Veículos. Todos os direitos reservados.</p>
+      <p>Desenvolvido por Max Ephra</p>
+    </div>
+  </footer>
+
+  <script>
+    const carros = [
+      {
+        id: "001",
+        status: "disponível",
+        modelo: "MERCEDES-BENZ GLE 63 AMG",
+        descricao: "5.5 V8 Turbo Gasolina Coupé 4MATIC 7G-TRONIC",
+        ano: "2017",
+        anoModelo: "2017/2017",
+        km: "50000",
+        cambio: "Automático",
+        cor: "Preto",
+        combustivel: "Gasolina",
+        placaFinal: "3",
+        preco: "250000",
+        imagens: ["https://gattiveiculos.com.br/cdn/shop/files/1_102530.jpg?v=1752442177"]
+      },
+      {
+        id: "002",
+        status: "vendido",
+        modelo: "MERCEDES-BENZ AMG GT 63",
+        descricao: "4.0 V8 TURBO GASOLINA S 4MATIC+ SPEEDSHIFT",
+        ano: "2017",
+        anoModelo: "2018/2019",
+        km: "20708",
+        cambio: "Automático",
+        cor: "Preto",
+        combustivel: "Gasolina",
+        placaFinal: "0",
+        preco: "405000",
+        imagens: ["https://gattiveiculos.com.br/cdn/shop/files/3_112145.jpg?v=1752441742"]
+      },
+      {
+        id: "003",
+        status: "disponível",
+        modelo: "AUDI Q3",
+        descricao: "1.4 35 TFSI GASOLINA BLACK S LINE S TRONIC",
+        ano: "2021",
+        anoModelo: "2021/2021",
+        km: "32186",
+        cambio: "Automático",
+        cor: "Cinza",
+        combustivel: "Gasolina",
+        placaFinal: "1",
+        preco: "103000",
+        imagens: ["https://gattiveiculos.com.br/cdn/shop/files/2_052735.jpg?v=1752430163"]
+      },
+    ];
+
+    const carList = document.getElementById('car-list');
+
+    carros.forEach(carro => {
+      const card = document.createElement('div');
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition";
+
+      card.innerHTML = `
+        <img src="${carro.imagens[0]}" alt="${carro.modelo}" class="w-full h-48 object-cover cursor-pointer zoom-image" onclick="toggleImageModal(true, '${carro.imagens[0]}')">
+        <div class="p-4">
+          <h2 class="text-lg font-semibold">${carro.modelo}</h2>
+          <p class="text-sm text-gray-700">${carro.descricao}</p>
+          <ul class="text-sm text-gray-600 mt-2">
+            <li><strong>Ano:</strong> ${carro.anoModelo}</li>
+            <li><strong>KM:</strong> ${parseInt(carro.km).toLocaleString('pt-BR')} km</li>
+            <li><strong>Câmbio:</strong> ${carro.cambio}</li>
+            <li><strong>Cor:</strong> ${carro.cor}</li>
+            <li><strong>Combustível:</strong> ${carro.combustivel}</li>
+            <li><strong>Final da Placa:</strong> ${carro.placaFinal}</li>
+          </ul>
+          <p class="text-yellow-600 font-bold text-lg mt-2">R$ ${parseInt(carro.preco).toLocaleString('pt-BR')}</p>
+          <span class="inline-block mt-2 px-2 py-1 text-xs rounded-full ${carro.status === 'disponível' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}">
+            ${carro.status.toUpperCase()}
+          </span>
+          <button onclick="toggleModal(true)" class="mt-4 w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Saiba mais</button>
+        </div>
+      `;
+
+      carList.appendChild(card);
+    });
+
+    function toggleModal(show) {
+      const modal = document.getElementById('modal');
+      modal.style.display = show ? 'flex' : 'none';
+    }
+
+    function toggleImageModal(show, src = '') {
+      const imageModal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modalImage');
+      imageModal.style.display = show ? 'flex' : 'none';
+      if (show && src) modalImage.src = src;
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
